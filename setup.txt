@@ -1,0 +1,23 @@
+node server.js in express directory 
+	- supervisor server.js for auto-refresh node debugging
+npm start in react directory. 
+bin\solr start -f -q in solr directory
+
+node server: http://localhost:3001/
+react server: http://localhost:8080/
+solr server: http://localhost:8983/solr/#/customers
+
+netstat -ano | findstr :8983
+taskkill /PID 2240 /F
+
+solr query builder:
+https://www.npmjs.com/package/solr-query-builder
+
+react bootstrap table:
+http://allenfang.github.io/react-bootstrap-table/
+
+To Do:
+2. Load in all data to solr
+4. Facets - Date, status, etc. 
+5. Windows service for solr - Set this up in a docker container?
+6. text highlighting
