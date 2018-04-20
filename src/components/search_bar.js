@@ -12,7 +12,8 @@ export default class SearchBar extends Component {
 					   ds: '',
 					   status_open: '',
 					   status_closed: '',
-					   status_dead: ''
+					   status_dead: '',
+					   task_logs: ''
 					 };
 
 		this.onInputChange = this.onInputChange.bind(this);
@@ -70,6 +71,13 @@ export default class SearchBar extends Component {
 								<Checkbox id="status_open" value={this.state.status} onChange={this.onInputChange} inline>Open</Checkbox>
 								<Checkbox id="status_closed" value={this.state.status} onChange={this.onInputChange} inline>Closed-Completed</Checkbox>
 								<Checkbox id="status_dead" value={this.state.status} onChange={this.onInputChange} inline>Closed-Dead</Checkbox>
+							</Col>
+						</Row>
+
+						<Row style={{"paddingTop" : "10px"}}>
+							<Col lg={4}>
+			      				<ControlLabel>Task Log Comments</ControlLabel>
+								<input type="text" className="form-control" placeholder="Task Log Comments" id="task_logs" value={this.state.task_logs} onChange={this.onInputChange} />
 							</Col>
 						</Row>
 

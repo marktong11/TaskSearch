@@ -10,3 +10,6 @@ https://www.npmjs.com/package/solr-query-builder
 
 react bootstrap table:
 http://allenfang.github.io/react-bootstrap-table/
+
+*********************************************
+Updated to use concurrently: simply type npm start in console.

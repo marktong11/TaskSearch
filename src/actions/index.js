@@ -25,6 +25,12 @@ export function fetchTasks(searchTerms) {
 			},{ contains: true });
 		}	
 
+		if (searchTerms.task_logs) {
+			qb.any({ 
+				wsp_internal_comments: searchTerms.task_logs 
+			},{ contains: true });
+		}
+
 		if (searchTerms.ds) {
 			qb.any({ 
 				ds: searchTerms.ds 
@@ -47,7 +53,7 @@ export function fetchTasks(searchTerms) {
 	// parses the query object to query string 
 	var queryResult = qb.build();
 
-	const request = axios.get(`${ROOT_URL}?q=${queryResult}&rows=1000`);
+	const request = axios.get(`${ROOT_URL}?q=${queryResult}&sort=create_date DESC&rows=1000`);
 
 	return {
 		type: FETCH_TASKS,

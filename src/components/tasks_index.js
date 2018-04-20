@@ -4,14 +4,18 @@ import { fetchTasks } from '../actions';
 import _ from 'lodash';
 import SearchBar from './search_bar';
 import { BootstrapTable, TableHeaderColumn  } from 'react-bootstrap-table';
-import { Grid, Col, Row, PageHeader } from 'react-bootstrap';
+import { Grid, Col, Row, PageHeader,Navbar, Nav, NavItem, NavDropdown, MenuItem   } from 'react-bootstrap';
 import Moment from 'react-moment';
 import TaskDetails from './task_details';
+import Highlight from 'react-highlighter';
+import MainNavBar from '../containers/main_nav_bar';
 
 
 class TasksIndex extends Component {
 	constructor(props){
 		super(props);
+
+		this.state = { searchTerms: {} }
 
 		this.expandComponent = this.expandComponent.bind(this);
 	}
@@ -22,6 +26,8 @@ class TasksIndex extends Component {
 
 
  	taskSearch(terms) {
+ 		 this.setState({searchTerms: terms});
+ 		console.log(this.state);
  		this.props.fetchTasks(terms);
  	}
 
@@ -31,16 +37,24 @@ class TasksIndex extends Component {
 
 	expandComponent(row) {
 		//I double parse to pass by val instead of reference. It basically tricks the compiler into creating a new object.
-	    return (
-	      <TaskDetails taskList={ JSON.parse(JSON.stringify(this.props.tasks)) } taskNum={ row.task_num } />
-	    );
+	    return <TaskDetails taskList={ JSON.parse(JSON.stringify(this.props.tasks)) } taskNum={ row.task_num } />;
 	 }
 
 
   	formatDate(data, row) {
-  		return (
-  			<Moment format="MM/DD/YYYY">{ data }</Moment>
-  		);
+  		return <Moment format="MM/DD/YYYY">{ data }</Moment>;
+  	}
+
+  	formatHtml(data, row) {
+  		if(data) {
+  			return data[0];
+  		}
+  	}
+
+  	formatSiteName(data, row) {
+  		if(data) {
+  			return <b>{ data[0] }</b>;
+  		}
   	}
 
 	render() {
@@ -53,7 +67,7 @@ class TasksIndex extends Component {
 	      }, {
 	        text: 'All', value: _.map(_.mapKeys(this.props.tasks, 'task_num')).length
 	      } ], // you can change the dropdown list for size per page
-	      sizePerPage: 10,  // which size per page you want to locate as default
+	      sizePerPage: 20,  // which size per page you want to locate as default
 	      pageStartIndex: 1, // where to start counting the pages
 	      paginationSize: 3,  // the pagination bar size.
 	      prePage: 'Prev', // Previous page button text
@@ -68,8 +82,11 @@ class TasksIndex extends Component {
 	    };
 
 		return(
+			  
+
 			<div>
-				 <PageHeader>Task Search</PageHeader>
+				<MainNavBar />
+				<PageHeader>Task Search</PageHeader>
 
 				<Grid>
 					<SearchBar onSearchSubmit={ this.taskSearch.bind(this) } />
@@ -83,12 +100,12 @@ class TasksIndex extends Component {
        									expandColumnOptions={ { expandColumnVisible: true } }>
 
 						 	 <TableHeaderColumn dataField='task_num' isKey width='125'>Task #</TableHeaderColumn>
-						 	 <TableHeaderColumn dataField='site' width='150' dataSort={ true }>Site</TableHeaderColumn>
+						 	 <TableHeaderColumn dataField='site' width='150' dataFormat={ this.formatSiteName } dataSort={ true }>Site</TableHeaderColumn>
 						 	 <TableHeaderColumn dataField='job_name' tdStyle={ { whiteSpace: 'normal' } } width='200'>Job</TableHeaderColumn>
 						 	 <TableHeaderColumn dataField='status' dataSort={ true } width='150'>Status</TableHeaderColumn>
 						 	 <TableHeaderColumn dataField='create_date' dataFormat={ this.formatDate } dataSort={ true } width='125'>Create Date</TableHeaderColumn>
-						 	 <TableHeaderColumn dataField='comments' tdStyle={ { whiteSpace: 'normal' } } width='500'>Task Comments</TableHeaderColumn>
-						 	 <TableHeaderColumn dataField='ds' width='500' tdStyle={ { whiteSpace: 'normal' } }>Task Description</TableHeaderColumn>
+						 	 <TableHeaderColumn dataField='comments' dataFormat={ this.formatHtml } tdStyle={ { whiteSpace: 'normal' } } width='500'>Task Comments</TableHeaderColumn>
+						 	 <TableHeaderColumn dataField='ds' width='500' dataFormat={ this.formatHtml }  tdStyle={ { whiteSpace: 'normal' } }>Task Description</TableHeaderColumn>
 						 </BootstrapTable>
 					</div>
 				</Grid>
